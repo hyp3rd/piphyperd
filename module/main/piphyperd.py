@@ -1,5 +1,4 @@
-from subprocess import Popen, PIPE
-import os
+from subprocess import Popen, PIPE, CalledProcessError
 import sys
 from pathlib import Path
 
@@ -28,29 +27,29 @@ class PipHyperd:
         exception = ""
 
         try:
-            ''' leverage subprocess.Popen to execute pip commands '''
+            # leverage subprocess.Popen to execute pip commands
             process = Popen(
                 [sys.executable, "-m", "pip", command] + self.pip_options + self.packages + self.command_args, stdout=PIPE, stderr=PIPE)
 
-            ''' wait for the process to terminate '''
+            # wait for the process to terminate
             if wait:
                 process.wait()
 
-            ''' iterate the process standard out lines and stream the content to the terminal '''
+            # iterate the process standard out lines and stream the content to the terminal
 
             for line in process.stdout:
                 stdout += line.decode("utf-8")
                 sys.stdout.write(line.decode("utf-8"))
 
-            ''' iterate the process standard error lines and stream the content to the terminal '''
+            # iterate the process standard error lines and stream the content to the terminal
 
             for line in process.stderr:
                 stderr += line.decode("utf-8")
                 sys.stderr.write(line.decode("utf-8"))
 
-        except subprocess.CalledProcessError as e:
-            print(e)
-            exception = e
+        except CalledProcessError as called_process_error:
+            print(called_process_error)
+            exception = called_process_error
             process.kill()
         finally:
             return stdout, stderr, exception
