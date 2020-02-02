@@ -28,7 +28,7 @@ piphyperd.PipHyperd().check()
 
 ## License
 
-[GNU General Public License v3 (GPLv3)](./LICENSE)
+[GNU General Public License v3 (GPLv3)](https://gitlab.com/hyperd/piphyperd/blob/master/LICENSE)
 
 ## Author Information
 
