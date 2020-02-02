@@ -74,7 +74,7 @@ class PipHyperd:
         package -- Package to show
         """
         self.packages.append(package)
-        self.__subprocess_wrapper("show")
+        return self.__subprocess_wrapper("show")
 
     def check(self):
         """
@@ -114,7 +114,7 @@ class PipHyperd:
             destination = str(destination).strip()
             self.command_args.append("-d{}".format(Path(destination)))
 
-        self.__subprocess_wrapper("download")
+        return self.__subprocess_wrapper("download")
 
     def uninstall(self, *packages):
         """
@@ -128,4 +128,4 @@ class PipHyperd:
             self.packages.append(package)
 
         self.pip_options.insert(0, "-y")
-        self.__subprocess_wrapper("uninstall")
+        return self.__subprocess_wrapper("uninstall")
