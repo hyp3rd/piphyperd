@@ -12,22 +12,22 @@ services:
   - docker:dind
 
 stages:
-  - build
+  - lint
   - test
-  - deploy
 
 before_script:
   - apt-get update && apt-get install make
   - python3 --version
 
-build:
+pylint:
   stage: lint
   extends: .pipelinesetup
   script:
     - pip3 install --upgrade pip pylint
     - make pylint
-test:
-  stage: codecov
+
+coverage-test:
+  stage: test
   extends: .pipelinesetup
   script:
     - pip3 install codecov
