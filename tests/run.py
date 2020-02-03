@@ -1,4 +1,4 @@
-from piphyperd import PipHyperd
+from .piphyperd import PipHyperd
 
 PipHyperd().check()
 

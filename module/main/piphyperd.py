@@ -45,7 +45,8 @@ class PipHyperd:
         try:
             # leverage subprocess.Popen to execute pip commands
             process = Popen(
-                [sys.executable, "-m", "pip", command] + self.pip_options + self.packages + self.command_args, stdout=PIPE, stderr=PIPE)
+                [sys.executable, "-m", "pip", command]
+                + self.pip_options + self.packages + self.command_args, stdout=PIPE, stderr=PIPE)
 
             # wait for the process to terminate
             if wait:
