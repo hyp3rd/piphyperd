@@ -2,6 +2,8 @@
 
 [![pipeline status](https://gitlab.com/hyperd/piphyperd/badges/master/pipeline.svg)](https://gitlab.com/hyperd/piphyperd/commits/master)
 
+[![pylint](https://gitlab.com/hyperd/piphyperd/-/jobs/artifacts/master/raw/pylint/pylint.svg?job=pylint)](https://gitlab.com/hyperd/piphyperd/commits/master)
+
 A simple python package to leverage pip programmatically.
 **piphyperd** is a wrapper around **pip**; it can provide features like automation or dependencies control within your workflows.
 
