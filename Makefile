@@ -77,7 +77,7 @@ pylint:
 	# $(RUN_DOCK) "cd ~/$(MODULE_NAME)/module \
 	# 	&& pylint --rcfile=../.pylintrc * -f parseable"
 	cd ./module \
-		&& pylint * -f parseable
+		&& pylint --output-format=text * -f parseable
 
 .PHONY: upload
 # upload:
