@@ -13,6 +13,12 @@ cache:
 services:
   - docker:dind
 
+stages:
+  - build
+  - lint
+  - test
+  - deploy
+
 before_script:
   - apk update && apk add --no-cache docker
     python3-dev py3-pip docker gcc git curl build-base
@@ -21,8 +27,8 @@ before_script:
   - docker info
   - python3 --version
 
-test:
+build:
   stage: lint
   script:
-    - pip3 install --upgrade pip
+    - pip3 install --upgrade pip pylint
     - make lint
