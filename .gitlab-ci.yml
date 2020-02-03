@@ -1,0 +1,28 @@
+---
+image: docker:git
+
+variables:
+  GIT_DEPTH: "1"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
+
+cache:
+  paths:
+    - "$CI_PROJECT_DIR/pip-cache"
+  key: "$CI_PROJECT_ID"
+
+services:
+  - docker:dind
+
+before_script:
+  - apk update && apk add --no-cache docker
+    python3-dev py3-pip docker gcc git curl build-base
+    autoconf make automake py3-cryptography linux-headers
+    musl-dev libffi-dev openssl-dev openssh
+  - docker info
+  - python3 --version
+
+test:
+  stage: lint
+  script:
+    - pip3 install --upgrade pip
+    - make lint
