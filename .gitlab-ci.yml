@@ -25,7 +25,7 @@ before_script:
   #   autoconf make automake py3-cryptography linux-headers
   #   musl-dev libffi-dev openssl-dev openssh
   # - docker info
-  - apk update && apk add --no-cache py3-pip make
+  - apt-get update && apt-get install make
   - python3 --version
 
 build:
