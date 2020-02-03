@@ -1,0 +1,39 @@
+---
+image: python:slim
+
+variables:
+  PIP_CACHE: ${CI_PROJECT_DIR}/pip_cache
+cache:
+  paths:
+    - ${CI_PROJECT_DIR}/pip_cache
+  key: ${CI_PROJECT_ID}
+
+services:
+  - docker:dind
+
+stages:
+  - lint
+  - test
+
+before_script:
+  - apt-get update && apt-get install make
+  - python3 --version
+
+pylint:
+  stage: lint
+  extends: .pipelinesetup
+  script:
+    - pip3 install --upgrade pip pylint
+    - make pylint
+
+coverage-test:
+  stage: test
+  extends: .pipelinesetup
+  script:
+    - pip3 install codecov
+    - coverage run ./module/main/tests/unit.py
+
+.pipelinesetup:
+  before_script:
+    - mkdir -p $PIP_CACHE
+    - apt-get update && apt-get install make
