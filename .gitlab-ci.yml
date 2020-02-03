@@ -31,4 +31,4 @@ build:
   stage: lint
   script:
     - pip3 install --upgrade pip pylint
-    - make lint
+    - make pylint
