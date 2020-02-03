@@ -1,3 +1,9 @@
-import piphyperd
+from piphyperd import PipHyperd
 
-piphyperd.PipHyperd().check()
+PipHyperd().check()
+
+PipHyperd("--verbose").list()
+
+PipHyperd("--verbose").show("ansible")
+
+PipHyperd().show("ansible")
