@@ -2,7 +2,6 @@
 DO NOT REMOVE THIS
 """
 
-import sys
 from .main.piphyperd import PipHyperd
 
 
