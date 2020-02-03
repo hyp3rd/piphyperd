@@ -1,9 +1,29 @@
+"""
+THIS SOFTWARE IS PROVIDED AS IS
+and under GNU General Public License. <https://www.gnu.org/licenses/gpl-3.0.en.html>
+USE IT AT YOUR OWN RISK.
+
+PipHyperd is a simple python object to leverage pip programmatically.
+piphyperd is a wrapper around **pip**; it can provide features like
+automation or dependencies control within your workflows.
+
+The module is published on PyPi <https://pypi.org/project/piphyperd/>.
+
+The code is available on GitLab <https://gitlab.com/hyperd/piphyperd>.
+"""
+
 from subprocess import Popen, PIPE, CalledProcessError
 import sys
 from pathlib import Path
 
 
 class PipHyperd:
+    """
+    PipHyperd a wrapper class around pip.
+
+    *pip_options -- pip command options, e.g.: pip {pip_options} uninstall testpypi
+    """
+
     def __init__(self, *pip_options):
         # A list of pip packages to install || show || download || uninstall
         self.packages = list()
@@ -22,10 +42,6 @@ class PipHyperd:
         wait -- True || False wait for the process to terminate
         """
 
-        stdout = ""
-        stderr = ""
-        exception = ""
-
         try:
             # leverage subprocess.Popen to execute pip commands
             process = Popen(
@@ -36,23 +52,23 @@ class PipHyperd:
                 process.wait()
 
             # iterate the process standard out lines and stream the content to the terminal
-
+            stdout = ""
             for line in process.stdout:
                 stdout += line.decode("utf-8")
                 sys.stdout.write(line.decode("utf-8"))
 
             # iterate the process standard error lines and stream the content to the terminal
-
+            stderr = ""
             for line in process.stderr:
                 stderr += line.decode("utf-8")
                 sys.stderr.write(line.decode("utf-8"))
 
+            return stdout, stderr
+
         except CalledProcessError as called_process_error:
             print(called_process_error)
-            exception = called_process_error
             process.kill()
-        finally:
-            return stdout, stderr, exception
+            return called_process_error
 
     def freeze(self):
         """
