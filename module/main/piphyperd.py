@@ -81,7 +81,7 @@ class PipHyperd:
         """
         List installed pip packages.
         """
-        self.__subprocess_wrapper("list")
+        return self.__subprocess_wrapper("list")
 
     def show(self, package):
         """
@@ -96,7 +96,7 @@ class PipHyperd:
         """
         Verify installed packages have compatible dependencies.
         """
-        self.__subprocess_wrapper("check", wait=True)
+        return self.__subprocess_wrapper("check", wait=True)
 
     def install(self, *packages):
         """
