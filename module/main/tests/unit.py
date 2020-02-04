@@ -33,11 +33,18 @@ class TestMethods(unittest.TestCase):
         """
         self.piphyperd = PipHyperd()
 
-    def test_add(self):
+    def test_is_not_none(self):
         """
         Assert that PipHyperd is not None
         """
         self.assertIsNotNone(self.piphyperd)
+
+    def test_wrong_python_path(self):
+        """
+        Raise a BaseException when initialized with a wrong python path
+        """
+        with self.assertRaises(BaseException):
+            PipHyperd(python_path="/path/to/nothing").check()
 
 
 if __name__ == '__main__':
