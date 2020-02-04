@@ -27,8 +27,10 @@ Taking everything into account, still might be necessary, or usefull, handling p
 
 ```python
 # leverage subprocess.Popen to execute pip commands
-subprocess.process = Popen(
-    [sys.executable, "-m", "pip", command] + self.pip_options + self.packages + self.command_args, stdout=PIPE, stderr=PIPE)
+process = Popen(
+    [sys.executable if self.python_path is None else self.python_path,
+     "-m", "pip", command]
+    + self.pip_options + self.packages + self.command_args, stdout=PIPE, stderr=PIPE)
 ```
 
 For further information, continue reading from the source of this topic at the [the official pypa](https://pip.pypa.io/en/latest/user_guide/#using-pip-from-your-program) user guide.
@@ -49,8 +51,15 @@ Once installed, you can import the package as follows `from piphyperd import Pip
 The module is wrapping pip commands in methods, exposed through the object `PipHyperd`. You can initialize it by optionally passing pip commands extra options:
 
 ```python
-class PipHyperd:
-    def __init__(self, *pip_options):
+def __init__(self, *pip_options, python_path=None):
+    # Path to the python binary to use
+    self.python_path = python_path
+    # A list of pip packages to install || show || download || uninstall
+    self.packages = list()
+    # pip command args, e.g.: pip download testpypi {command_args}
+    self.command_args = list()
+    # pip options, e.g.: pip {pip_options} uninstall testpypi
+    self.pip_options = list(pip_options)
 # ...
 ```
 
