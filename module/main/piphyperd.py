@@ -21,10 +21,14 @@ class PipHyperd:
     """
     PipHyperd a wrapper class around pip.
 
+    python_path -- Path to the python binary to use
+
     *pip_options -- pip command options, e.g.: pip {pip_options} uninstall testpypi
     """
 
-    def __init__(self, *pip_options):
+    def __init__(self, *pip_options, python_path=None):
+        # Path to the python binary to use
+        self.python_path = python_path
         # A list of pip packages to install || show || download || uninstall
         self.packages = list()
         # pip command args, e.g.: pip download testpypi {command_args}
@@ -45,7 +49,8 @@ class PipHyperd:
         try:
             # leverage subprocess.Popen to execute pip commands
             process = Popen(
-                [sys.executable, "-m", "pip", command]
+                [sys.executable if self.python_path is None else self.python_path,
+                 "-m", "pip", command]
                 + self.pip_options + self.packages + self.command_args, stdout=PIPE, stderr=PIPE)
 
             # wait for the process to terminate
