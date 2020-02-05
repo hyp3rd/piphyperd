@@ -41,10 +41,17 @@ class TestMethods(unittest.TestCase):
 
     def test_wrong_python_path(self):
         """
-        Raise a BaseException when initialized with a wrong python path
+        Raise a FileNotFoundError when initialized with a wrong python path
         """
-        with self.assertRaises(BaseException):
+        with self.assertRaises(FileNotFoundError):
             PipHyperd(python_path="/path/to/nothing").check()
+
+    def test_list_outdated(self):
+        """
+        Assert that Latest is in the output
+        """
+        output = self.piphyperd.list(True)
+        self.assertIn("Latest", output)
 
 
 if __name__ == '__main__':
