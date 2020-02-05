@@ -81,8 +81,13 @@ piphyperd.PipHyperd().freeze()
 
 List installed pip packages.
 
+list_outdated -- True || False to list or not the outdated packages
+
 ```python
 piphyperd.PipHyperd("--verbose").list() # the argument "--verbose" is of course optional
+
+# List outdated packages
+piphyperd.PipHyperd().list(True)
 ```
 
 #### pip show {{ package }}
