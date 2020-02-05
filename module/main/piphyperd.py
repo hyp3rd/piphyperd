@@ -36,7 +36,7 @@ class PipHyperd:
         # pip options, e.g.: pip {pip_options} uninstall testpypi
         self.pip_options = list(pip_options)
 
-    def __subprocess_wrapper(self, command, wait=False):
+    def __subprocess_wrapper(self, command, wait=True):
         """
         A subprocess wrapper allowing to execute pip commands
         from the public methods of the PipModules object.
@@ -57,19 +57,19 @@ class PipHyperd:
             if wait:
                 process.wait()
 
-            # iterate the process standard out lines and stream the content to the terminal
-            stdout = ""
-            for line in process.stdout:
-                stdout += line.decode("utf-8")
-                sys.stdout.write(line.decode("utf-8"))
+            stdout, stderr = process.communicate()
 
-            # iterate the process standard error lines and stream the content to the terminal
-            stderr = ""
-            for line in process.stderr:
-                stderr += line.decode("utf-8")
-                sys.stderr.write(line.decode("utf-8"))
+            if stdout:
+                output = f'{stdout.decode("utf-8")}'
+                sys.stdout.write(output)
+                return output
 
-            return stdout, stderr
+            if stderr:
+                output = f'{stderr.decode("utf-8")}'
+                sys.stderr.write(output)
+                return output
+
+            return f'Process exited with {process.returncode}'
 
         except CalledProcessError as called_process_error:
             print(called_process_error)
@@ -82,10 +82,16 @@ class PipHyperd:
         """
         return self.__subprocess_wrapper("freeze", wait=True)
 
-    def list(self):
+    def list(self, list_outdated=False):
         """
         List installed pip packages.
+
+        list_outdated -- True || False to list or not the outdated packages
         """
+
+        if list_outdated:
+            self.command_args.insert(0, "--outdated")
+
         return self.__subprocess_wrapper("list")
 
     def show(self, package):
