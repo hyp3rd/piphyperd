@@ -37,7 +37,7 @@ coverage:
   stage: test
   extends: .pipelinesetup
   script:
-    - pip3 install codecov
+    - pip3 install codecov virtualenv
     # install an outdated package for the negative test test_list_outdated
     - pip3 install yarl==1.1.0
     - coverage run ./module/main/tests/unit.py

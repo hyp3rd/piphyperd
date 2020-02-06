@@ -23,15 +23,19 @@ if not PATH in sys.path:
 del PATH
 
 
+def wiper(folder):
+    """
+    Helper function to clean up folders generated during the tests
+    """
+    if os.path.isdir(folder):
+        shutil.rmtree(folder)
+
+
 class TestMethods(unittest.TestCase):
 
     """
     PipHyperd unit testing class
     """
-
-    def __wiper(self, folder):
-        if os.path.isdir(folder):
-            shutil.rmtree(folder)
 
     def setUp(self):
         """
@@ -68,7 +72,7 @@ class TestMethods(unittest.TestCase):
 
         output, _, _ = self.piphyperd.list()
 
-        self.__wiper(venv_path)
+        wiper(venv_path)
 
         self.assertIn("ansible", output)
 
