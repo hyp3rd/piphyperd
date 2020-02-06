@@ -59,17 +59,13 @@ class PipHyperd:
 
             stdout, stderr = process.communicate()
 
-            if stdout:
-                output = f'{stdout.decode("utf-8")}'
-                sys.stdout.write(output)
-                return output
+            output = f'{stdout.decode("utf-8")}'
+            sys.stdout.write(output)
 
-            if stderr:
-                output = f'{stderr.decode("utf-8")}'
-                sys.stderr.write(output)
-                return output
+            outerr = f'{stderr.decode("utf-8")}'
+            sys.stderr.write(output)
 
-            return f'Process exited with {process.returncode}'
+            return output, outerr, f'Process exited with {process.returncode}'
 
         except CalledProcessError as called_process_error:
             print(called_process_error)
