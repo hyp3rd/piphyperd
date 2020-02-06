@@ -13,12 +13,22 @@ The code is available on GitLab <https://gitlab.com/hyperd/piphyperd>.
 import unittest
 import sys
 import os
+import shutil
+import virtualenv
 
 PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if not PATH in sys.path:
     sys.path.insert(1, PATH)
     from piphyperd import PipHyperd
 del PATH
+
+
+def wiper(folder):
+    """
+    Helper function to clean up folders generated during the tests
+    """
+    if os.path.isdir(folder):
+        shutil.rmtree(folder)
 
 
 class TestMethods(unittest.TestCase):
@@ -46,13 +56,33 @@ class TestMethods(unittest.TestCase):
         with self.assertRaises(FileNotFoundError):
             PipHyperd(python_path="/path/to/nothing").check()
 
-    # def test_list_outdated(self):
-    #     """
-    #     Assert that Latest is in the output
-    #     """
-    #     output, err, exitcode = self.piphyperd.list(True)
+    def test_install(self):
+        """
+        Assert that after installing is in the output
+        """
+        venv_path = "{}/python-venv".format(os.path.dirname(__file__))
+        virtualenv.create_environment(venv_path, symlink=False)
+        virtualenv.subprocess.call(
+            'source {}/bin/activate'.format(venv_path), shell=True)
 
-    #     self.assertIn("Latest", output)
+        self.piphyperd = PipHyperd(
+            python_path="{}/bin/python3".format(venv_path))
+
+        self.piphyperd.install("ansible")
+
+        output, _, _ = self.piphyperd.list()
+
+        wiper(venv_path)
+
+        self.assertIn("ansible", output)
+
+    def test_list_outdated(self):
+        """
+        Assert that "Latest" is in the output
+        """
+        output, _, _ = self.piphyperd.list(True)
+
+        self.assertIn("Latest", output)
 
 
 if __name__ == '__main__':

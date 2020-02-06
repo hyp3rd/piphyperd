@@ -22,7 +22,7 @@ pylint:
   stage: test
   extends: .pipelinesetup
   script:
-    - pip3 install --upgrade pip pylint pylint-exit anybadge
+    - pip3 install --upgrade pylint pylint-exit anybadge
     - mkdir ./pylint
     - make pylint
     - cd ./module && pylint *  -f parseable --output-format=text . | tee ../pylint/pylint.log || pylint-exit $? && cd -
@@ -46,3 +46,4 @@ coverage:
   before_script:
     - mkdir -p $PIP_CACHE
     - apt-get update && apt-get install make
+    - pip3 install --upgrade pip virtualenv
