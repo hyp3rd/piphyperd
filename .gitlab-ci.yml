@@ -22,7 +22,7 @@ pylint:
   stage: test
   extends: .pipelinesetup
   script:
-    - pip3 install --upgrade pip pylint pylint-exit anybadge
+    - pip3 install --upgrade pylint pylint-exit anybadge
     - mkdir ./pylint
     - make pylint
     - cd ./module && pylint *  -f parseable --output-format=text . | tee ../pylint/pylint.log || pylint-exit $? && cd -
@@ -37,7 +37,7 @@ coverage:
   stage: test
   extends: .pipelinesetup
   script:
-    - pip3 install codecov virtualenv
+    - pip3 install codecov
     # install an outdated package for the negative test test_list_outdated
     - pip3 install yarl==1.1.0
     - coverage run ./module/main/tests/unit.py
@@ -46,3 +46,4 @@ coverage:
   before_script:
     - mkdir -p $PIP_CACHE
     - apt-get update && apt-get install make
+    - pip3 install --upgrade pip virtualenv
