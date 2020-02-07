@@ -74,23 +74,14 @@ module:
 
 .PHONY: pylint
 pylint:
-	# $(RUN_DOCK) "cd ~/$(MODULE_NAME)/module \
-	# 	&& pylint --rcfile=../.pylintrc * -f parseable"
 	cd ./module \
 		&& pylint --output-format=text * -f parseable
 
 .PHONY: upload
-# upload:
-# 	$(RUN_DOCK) "twine upload ~/$(MODULE_NAME)/dist/$(MODULE_NAME)-$(MODULE_VERSION)*"
 upload:
 	twine upload ./dist/$(MODULE_NAME)-$(MODULE_VERSION)*
 
 .PHONY: clean
-# clean:
-# 	$(RUN_DOCK) "cd ~/$(MODULE_NAME) \
-# 		&& rm -rf ./build ./dist ./*.egg-info \
-# 		&& find ./ -type l -maxdepth 1 |xargs rm -f \
-# 		&& find ./$(MODULE) -type d -name '__pycache__' |xargs rm -rf"
 clean:
 	rm -rf ./build ./dist ./*.egg-info \
 		&& find ./ -type l -maxdepth 1 |xargs rm -f \
