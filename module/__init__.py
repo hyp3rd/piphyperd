@@ -1,4 +1,4 @@
 """
 DO NOT REMOVE THIS
 """
-from .main.piphyperd import PipHyperd
+from .main.parser import main

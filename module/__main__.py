@@ -2,8 +2,9 @@
 DO NOT REMOVE THIS
 """
 
-from .main.piphyperd import PipHyperd
-
+import sys
+# from .main.piphyperd import PipHyperd
+from .main.parser import main
 
 if __name__ == '__main__':
-    PipHyperd().check()
+    sys.exit(main())
