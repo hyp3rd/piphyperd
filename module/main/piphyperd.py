@@ -119,6 +119,20 @@ class PipHyperd:
 
         return self.__subprocess_wrapper("install")
 
+    def uninstall(self, *packages):
+        """
+        Uninstall pip packages.
+
+        *packages -- List of packages to uninstall
+        """
+        self.packages.clear()
+
+        for package in packages:
+            self.packages.append(package)
+
+        self.pip_options.insert(0, "-y")
+        return self.__subprocess_wrapper("uninstall")
+
     def download(self, *packages, destination=None):
         """
         Download pip packages.
@@ -138,17 +152,3 @@ class PipHyperd:
             self.command_args.append("-d{}".format(Path(destination)))
 
         return self.__subprocess_wrapper("download")
-
-    def uninstall(self, *packages):
-        """
-        Uninstall pip packages.
-
-        *packages -- List of packages to uninstall
-        """
-        self.packages.clear()
-
-        for package in packages:
-            self.packages.append(package)
-
-        self.pip_options.insert(0, "-y")
-        return self.__subprocess_wrapper("uninstall")
