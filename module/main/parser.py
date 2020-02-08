@@ -14,7 +14,7 @@ import sys
 import argparse
 import os
 
-from module.main.cli.cmdproxy import CmdProxy
+from module.main.cmdproxy import CmdProxy
 from module.main.piphyperd import PipHyperd
 
 
