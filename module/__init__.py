@@ -1,4 +1,4 @@
 """
 DO NOT REMOVE THIS
 """
-from .main.cli.parser import main
+from .main.parser import main
