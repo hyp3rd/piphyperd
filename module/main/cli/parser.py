@@ -14,12 +14,8 @@ import sys
 import argparse
 import os
 
-PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-
-if not PATH in sys.path:
-    sys.path.insert(1, PATH)
-    from .piphyperd import PipHyperd
-del PATH
+from module.main.cli.cmdproxy import CmdProxy
+from module.main.piphyperd import PipHyperd
 
 
 def main(python_path=None, command=None):
@@ -33,19 +29,19 @@ def main(python_path=None, command=None):
         module_name = __loader__.name.split('.')[0]
         parser = argparse.ArgumentParser(
             prog=module_name,
-            description="{} This is my new shiny pip package called".format(
-                module_name),
+            description="{} is a pip wrapper useful for dependencies control within your workflows."
+            .format(module_name),
         )
 
         parser.add_argument('--python_path', action='store', nargs=1, required=False, type=str,
                             default=[os.sys.executable],
-                            help="Provide a valid python path")
+                            help="Path to a python binary different than the systmes'")
 
-        parser.add_argument('--command', action='store', nargs=1, required=True, type=str,
+        parser.add_argument('command', nargs=1, type=str,
                             default=["list"],
                             help="Provide a valid pip command")
 
-        parser.add_argument('--packages', action='store', nargs=1, required=False, type=str,
+        parser.add_argument('--packages', action="store", nargs="+", required=False, type=str,
                             help="Provide a list of packages")
 
         # argparser provides us a list, even if only one argument
@@ -61,57 +57,30 @@ def main(python_path=None, command=None):
             if isinstance(args.command, list) and isinstance(args.command[0], str):
                 command = args.command[0]
 
-        command_args = list()
+        command_args = None
         if args.packages:
+            command_args = list()
             if isinstance(args.packages, list) and isinstance(args.packages[0], str):
                 command_args.clear()
-                for package in args.packages[0].split(','):
+                for package in args.packages:
                     command_args.append(package)
 
         switcher = {
-            "freeze": freeze,
-            "list": list_packages,
-            "check": check,
-            "install": install,
-            "uninstall": uninstall,
-            "download": download,
+            "freeze": CmdProxy.freeze,
+            "list": CmdProxy.list_packages,
+            "show": CmdProxy.show,
+            "check": CmdProxy.check,
+            "install": CmdProxy.install,
+            "uninstall": CmdProxy.uninstall,
+            "download": CmdProxy.download,
         }
-        # "list": lambda: 'nope'
+
         func = switcher.get(command, lambda: 'Invalid pip command')
 
     instance = PipHyperd(python_path=python_path)
 
-    pip_command, _, exit_code = func(instance, command_args)
+    pip_command, _, exit_code = func(
+        instance, command_args) if command_args is not None else func(instance)
 
     sys.stdout.write(pip_command + "\n")
     return exit_code
-
-
-def freeze(instance):
-    """ return pip freeze """
-    return instance.freeze()
-
-
-def list_packages(instance):
-    """ return pip list """
-    return instance.list()
-
-
-def check(instance):
-    """ return pip check """
-    return instance.check()
-
-
-def install(instance, packages):
-    """ return pip install ${packages} """
-    return instance.install(*packages)
-
-
-def uninstall(instance, packages):
-    """ return pip uninstall ${packages} """
-    return instance.uninstall(*packages)
-
-
-def download(instance, packages):
-    """ return pip download ${packages} """
-    return instance.download(*packages)
