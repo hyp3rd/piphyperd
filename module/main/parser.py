@@ -14,8 +14,12 @@ import sys
 import argparse
 import os
 
-from module.main.cmdproxy import CmdProxy
-from module.main.piphyperd import PipHyperd
+PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '.'))
+if not PATH in sys.path:
+    sys.path.insert(1, PATH)
+    from .piphyperd import PipHyperd
+    from .cmdproxy import CmdProxy
+del PATH
 
 
 def main(python_path=None, command=None):
