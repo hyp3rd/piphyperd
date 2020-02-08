@@ -1,5 +1,6 @@
 NAME="piphyperd"
-VERSION=1.2.5
+VERSION=1.2.6
+>>>>>>> fix/modules_import
 AUTHOR="hyperd"
 AUTHOR_EMAIL="fc@hyperd.sh"
 DESCRIPTION="A simple python package to leverage pip programmatically."
