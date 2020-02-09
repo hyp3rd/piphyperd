@@ -23,14 +23,6 @@ if not PATH in sys.path:
 del PATH
 
 
-def wiper(folder):
-    """
-    Helper function to clean up folders generated during the tests
-    """
-    if os.path.isdir(folder):
-        shutil.rmtree(folder)
-
-
 class TestMethods(unittest.TestCase):
 
     """
@@ -42,6 +34,14 @@ class TestMethods(unittest.TestCase):
         tests setup
         """
         self.piphyperd = PipHyperd()
+        self.venv_path = "{}/python-venv".format(os.path.dirname(__file__))
+        virtualenv.create_environment(self.venv_path, symlink=False)
+
+    def tearDown(self):
+        """
+        Remove test venv after testing
+        """
+        self.wiper(self.venv_path)
 
     def test_is_not_none(self):
         """
@@ -60,29 +60,61 @@ class TestMethods(unittest.TestCase):
         """
         Assert that after installing is in the output
         """
-        venv_path = "{}/python-venv".format(os.path.dirname(__file__))
-        virtualenv.create_environment(venv_path, symlink=False)
+
         virtualenv.subprocess.call(
-            'source {}/bin/activate'.format(venv_path), shell=True)
+            'source {}/bin/activate'.format(self.venv_path), shell=True)
 
         self.piphyperd = PipHyperd(
-            python_path="{}/bin/python3".format(venv_path))
+            python_path="{}/bin/python3".format(self.venv_path))
 
         self.piphyperd.install("ansible")
 
-        output, _, _ = self.piphyperd.list()
-
-        wiper(venv_path)
+        output, _, _ = self.piphyperd.list_packages()
 
         self.assertIn("ansible", output)
+
+    def test_uninstall(self):
+        """
+        Assert that after installing is in the output
+        """
+
+        virtualenv.subprocess.call(
+            'source {}/bin/activate'.format(self.venv_path), shell=True)
+
+        self.piphyperd = PipHyperd(
+            python_path="{}/bin/python3".format(self.venv_path))
+
+        self.piphyperd.uninstall("ansible")
+
+        output, _, _ = self.piphyperd.list_packages()
+
+        self.assertNotIn("ansible", output)
 
     def test_list_outdated(self):
         """
         Assert that "Latest" is in the output
         """
-        output, _, _ = self.piphyperd.list(True)
+
+        virtualenv.subprocess.call(
+            'source {}/bin/activate'.format(self.venv_path), shell=True)
+
+        self.piphyperd = PipHyperd(
+            python_path="{}/bin/python3".format(self.venv_path))
+
+        # install an outdated version of yarl
+        self.piphyperd.install("yarl==1.1.0")
+
+        output, _, _ = self.piphyperd.list_packages(True)
 
         self.assertIn("Latest", output)
+
+    @staticmethod
+    def wiper(folder):
+        """
+        Helper function to clean up folders generated during the tests
+        """
+        if os.path.isdir(folder):
+            shutil.rmtree(folder)
 
 
 if __name__ == '__main__':

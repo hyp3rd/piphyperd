@@ -33,6 +33,14 @@ pylint:
     paths:
       - ./pylint/
 
+code_quality:
+  stage: test
+  extends: .pipelinesetup
+  script:
+    - mypy --strict module/main/piphyperd.py
+    - mypy --strict module/main/cmdproxy.py
+    - mypy --strict module/main/parser.py
+
 coverage:
   stage: test
   extends: .pipelinesetup
@@ -46,4 +54,4 @@ coverage:
   before_script:
     - mkdir -p $PIP_CACHE
     - apt-get update && apt-get install make
-    - pip3 install --upgrade pip virtualenv
+    - pip3 install --upgrade pip virtualenv mypy

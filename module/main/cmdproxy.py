@@ -12,6 +12,9 @@ The module is published on PyPi <https://pypi.org/project/piphyperd/>.
 The code is available on GitLab <https://gitlab.com/hyperd/piphyperd>.
 """
 
+from typing import Tuple, Any
+from piphyperd import PipHyperd
+
 
 class CmdProxy:
     """
@@ -19,36 +22,36 @@ class CmdProxy:
     """
 
     @staticmethod
-    def freeze(instance):
+    def freeze(instance: PipHyperd) -> Tuple[str, str, int]:
         """ return pip freeze """
         return instance.freeze()
 
     @staticmethod
-    def list_packages(instance):
+    def list_packages(instance: PipHyperd) -> Tuple[str, str, int]:
         """ return pip list """
-        return instance.list()
+        return instance.list_packages()
 
     @staticmethod
-    def show(instance, packages):
+    def show(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:
         """ return pip show ${package} """
         return instance.show(packages[0])
 
     @staticmethod
-    def check(instance):
+    def check(instance: PipHyperd) -> Tuple[str, str, int]:
         """ return pip check """
         return instance.check()
 
     @staticmethod
-    def install(instance, packages):
+    def install(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:
         """ return pip install ${packages} """
         return instance.install(*packages)
 
     @staticmethod
-    def uninstall(instance, packages):
+    def uninstall(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:
         """ return pip uninstall ${packages} """
         return instance.uninstall(*packages)
 
     @staticmethod
-    def download(instance, packages):
+    def download(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:
         """ return pip download ${packages} """
         return instance.download(*packages)
