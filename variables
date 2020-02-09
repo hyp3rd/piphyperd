@@ -1,6 +1,5 @@
 NAME="piphyperd"
-VERSION=1.2.8
->>>>>>> development
+VERSION=1.2.9
 AUTHOR="hyperd"
 AUTHOR_EMAIL="fc@hyperd.sh"
 DESCRIPTION="A simple python package to leverage pip programmatically."
