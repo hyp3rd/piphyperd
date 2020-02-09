@@ -13,16 +13,18 @@ The code is available on GitLab <https://gitlab.com/hyperd/piphyperd>.
 import sys
 import argparse
 import os
+from typing import Optional, List, Any
+from pathlib import Path
 
 PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '.'))
 if not PATH in sys.path:
     sys.path.insert(1, PATH)
-    from .piphyperd import PipHyperd
-    from .cmdproxy import CmdProxy
+    from piphyperd import PipHyperd
+    from cmdproxy import CmdProxy
 del PATH
 
 
-def main(python_path=None, command=None):
+def main(python_path: Optional[Path] = None, command: str = "") -> int:
     """
     This function is called when run as python3 -m ${MODULE}
     Parse any additional arguments and call required module functions.
@@ -30,15 +32,14 @@ def main(python_path=None, command=None):
 
     if sys.argv:
         # called through CLI
-        module_name = __loader__.name.split('.')[0]
+        # module_name = __loader__.name.split('.')[0]
         parser = argparse.ArgumentParser(
-            prog=module_name,
-            description="{} is a pip wrapper useful for dependencies control within your workflows."
-            .format(module_name),
+            prog="piphyperd",
+            description="piphyperd is a pip wrapper for packages management within your workflows.",
         )
 
         parser.add_argument('--python_path', action='store', nargs=1, required=False, type=str,
-                            default=[os.sys.executable],
+                            default=[sys.executable],
                             help="Path to a python binary different than the systmes'")
 
         parser.add_argument('command', nargs=1, type=str,
@@ -54,14 +55,14 @@ def main(python_path=None, command=None):
         # check for alternative python path used to initialize the
         if args.python_path:
             if isinstance(args.python_path, list) and isinstance(args.python_path[0], str):
-                python_path = args.python_path[0]
+                python_path = Path(args.python_path[0])
 
         # check for alternative python path
         if args.command:
             if isinstance(args.command, list) and isinstance(args.command[0], str):
                 command = args.command[0]
 
-        command_args = None
+        command_args: List[str] = []
         if args.packages:
             command_args = list()
             if isinstance(args.packages, list) and isinstance(args.packages[0], str):
@@ -79,12 +80,14 @@ def main(python_path=None, command=None):
             "download": CmdProxy.download,
         }
 
-        func = switcher.get(command, lambda: 'Invalid pip command')
+        func: Any = switcher.get(command, lambda: 'Invalid pip command')
 
     instance = PipHyperd(python_path=python_path)
 
-    pip_command, _, exit_code = func(
-        instance, command_args) if command_args is not None else func(instance)
+    _, _, exit_code = func(
+        instance) if not command_args else func(instance, command_args)
 
-    sys.stdout.write(pip_command + "\n")
-    return exit_code
+    # _, _, exit_code = func(
+    #     instance, command_args) if not command_args is not None else func(instance)
+
+    return int(exit_code)
