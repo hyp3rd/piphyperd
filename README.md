@@ -51,15 +51,15 @@ Once installed, you can import the package as follows `from piphyperd import Pip
 The module is wrapping pip commands in methods, exposed through the object `PipHyperd`. You can initialize it by optionally passing pip commands extra options:
 
 ```python
-def __init__(self, *pip_options, python_path=None):
+def __init__(self, *pip_options: Any, python_path: Optional[Path] = None):
     # Path to the python binary to use
-    self.python_path = python_path
+    self.python_path: Optional[Path] = python_path
     # A list of pip packages to install || show || download || uninstall
-    self.packages = list()
+    self.packages: List[str] = list()
     # pip command args, e.g.: pip download testpypi {command_args}
-    self.command_args = list()
+    self.command_args: List[str] = list()
     # pip options, e.g.: pip {pip_options} uninstall testpypi
-    self.pip_options = list(pip_options)
+    self.pip_options: List[str] = list(pip_options)
 # ...
 ```
 
@@ -84,7 +84,7 @@ List installed pip packages.
 list_outdated -- True || False to list or not the outdated packages
 
 ```python
-piphyperd.PipHyperd("--verbose").list() # the argument "--verbose" is of course optional
+piphyperd.PipHyperd("--verbose").list_packages() # the argument "--verbose" is of course optional
 
 # List outdated packages
 piphyperd.PipHyperd().list(True)
