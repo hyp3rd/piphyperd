@@ -12,8 +12,15 @@ The module is published on PyPi <https://pypi.org/project/piphyperd/>.
 The code is available on GitLab <https://gitlab.com/hyperd/piphyperd>.
 """
 
+import os
+import sys
 from typing import Tuple, Any
-from piphyperd import PipHyperd
+
+PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '.'))
+if not PATH in sys.path:
+    sys.path.insert(1, PATH)
+    from piphyperd import PipHyperd
+del PATH
 
 
 class CmdProxy:
