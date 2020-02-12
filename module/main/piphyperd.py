@@ -1,15 +1,15 @@
-"""
-THIS SOFTWARE IS PROVIDED AS IS
-and under GNU General Public License. <https://www.gnu.org/licenses/gpl-3.0.en.html>
+"""THIS SOFTWARE IS PROVIDED AS IS.
+
+Released under GNU General Public License:
+<https://www.gnu.org/licenses/gpl-3.0.en.html>
+
 USE IT AT YOUR OWN RISK.
 
 PipHyperd is a simple python object to leverage pip programmatically.
-piphyperd is a wrapper around **pip**; it can provide features like
-automation or dependencies control within your workflows.
+It can provide automation and dependencies control within your workflows.
 
-The module is published on PyPi <https://pypi.org/project/piphyperd/>.
-
-The code is available on GitLab <https://gitlab.com/hyperd/piphyperd>.
+The module is published on PyPi: <https://pypi.org/project/piphyperd/>.
+The code is available on GitLab: <https://gitlab.com/hyperd/piphyperd>.
 """
 
 from subprocess import Popen, PIPE, CalledProcessError
@@ -19,15 +19,15 @@ from typing import Optional, List, Tuple, Any, Union
 
 
 class PipHyperd:
-    """
-    PipHyperd a wrapper class around pip.
+    """Wrapper class around pip.
 
     python_path -- Path to the python binary to use
 
-    *pip_options -- pip command options, e.g.: pip {pip_options} uninstall testpypi
+    *pip_options -- command options, e.g.: pip {pip_options} uninstall testpypi
     """
 
     def __init__(self, *pip_options: Any, python_path: Optional[Path] = None):
+        """Init method"""
         # Path to the python binary to use
         self.python_path: Optional[Path] = python_path
         # A list of pip packages to install || show || download || uninstall
@@ -37,16 +37,13 @@ class PipHyperd:
         # pip options, e.g.: pip {pip_options} uninstall testpypi
         self.pip_options: List[str] = list(pip_options)
 
-    def __subprocess_wrapper(self, command: str, wait: bool = True) -> Tuple[str, str, int]:
-        """
-        A subprocess wrapper allowing to execute pip commands
-        from the public methods of the PipModules object.
+    def __subprocess_wrapper(self, command: str,
+                             wait: bool = True) -> Tuple[str, str, int]:
+        """Subprocess wrapper allowing to execute pip commands.
 
-        command -- The pip command to execute (e.g. "install", or "freeze", etc.)
-
+        command -- The pip command to execute (e.g. "install", "freeze", [..])
         wait -- True || False wait for the process to terminate
         """
-
         try:
             # leverage subprocess.Popen to execute pip commands
             pip_full_cmd: Union[Any] = sorted(
@@ -78,26 +75,22 @@ class PipHyperd:
             return exception_output, exception_cmd, called_process_error.returncode
 
     def freeze(self) -> Tuple[str, str, int]:
-        """
-        Output installed pip packages in requirements format.
-        """
+        """Return installed pip packages in requirements format."""
         return self.__subprocess_wrapper("freeze", wait=True)
 
-    def list_packages(self, list_outdated: bool = False) -> Tuple[str, str, int]:
-        """
-        List installed pip packages.
+    def list_packages(self,
+                      list_outdated: bool = False) -> Tuple[str, str, int]:
+        """List installed pip packages.
 
         list_outdated -- True || False to list or not the outdated packages
         """
-
         if list_outdated:
             self.command_args.insert(0, "--outdated")
 
         return self.__subprocess_wrapper("list")
 
     def show(self, package: str) -> Tuple[str, str, int]:
-        """
-        Show information about installed packages.
+        """Show information about installed packages.
 
         package -- Package to show
         """
@@ -105,18 +98,14 @@ class PipHyperd:
         return self.__subprocess_wrapper("show")
 
     def check(self) -> Tuple[str, str, int]:
-        """
-        Verify installed packages have compatible dependencies.
-        """
+        """Verify installed packages have compatible dependencies."""
         return self.__subprocess_wrapper("check", wait=True)
 
     def install(self, *packages: List[str]) -> Tuple[str, str, int]:
-        """
-        Install pip packages.
+        """Install pip packages.
 
         *packages -- List of packages to install
         """
-
         self.packages.clear()
 
         for package in packages:
@@ -125,8 +114,7 @@ class PipHyperd:
         return self.__subprocess_wrapper("install")
 
     def uninstall(self, *packages: List[str]) -> Tuple[str, str, int]:
-        """
-        Uninstall pip packages.
+        """Uninstall pip packages.
 
         *packages -- List of packages to uninstall
         """
@@ -140,8 +128,7 @@ class PipHyperd:
 
     def download(self, *packages: List[str],
                  destination: Optional[Path] = None) -> Tuple[str, str, int]:
-        """
-        Download pip packages.
+        """Download pip packages.
 
         *packages -- List of packages to download
 

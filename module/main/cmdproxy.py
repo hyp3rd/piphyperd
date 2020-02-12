@@ -1,64 +1,56 @@
-"""
-THIS SOFTWARE IS PROVIDED AS IS
-and under GNU General Public License. <https://www.gnu.org/licenses/gpl-3.0.en.html>
+"""THIS SOFTWARE IS PROVIDED AS IS.
+
+Released under GNU General Public License:
+<https://www.gnu.org/licenses/gpl-3.0.en.html>
+
 USE IT AT YOUR OWN RISK.
 
 Command proxy for the PipHyperd cli.
 piphyperd is a wrapper around **pip**; it can provide features like
 automation or dependencies control within your workflows.
 
-The module is published on PyPi <https://pypi.org/project/piphyperd/>.
-
-The code is available on GitLab <https://gitlab.com/hyperd/piphyperd>.
+The module is published on PyPi: <https://pypi.org/project/piphyperd/>.
+The code is available on GitLab: <https://gitlab.com/hyperd/piphyperd>.
 """
 
-import os
-import sys
 from typing import Tuple, Any
-
-PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '.'))
-if not PATH in sys.path:
-    sys.path.insert(1, PATH)
-    from piphyperd import PipHyperd
-del PATH
+from .piphyperd import PipHyperd
 
 
 class CmdProxy:
-    """
-    PipHyperd interface class.
-    """
+    """PipHyperd interface class."""
 
     @staticmethod
     def freeze(instance: PipHyperd) -> Tuple[str, str, int]:
-        """ return pip freeze """
+        """Return pip freeze."""
         return instance.freeze()
 
     @staticmethod
     def list_packages(instance: PipHyperd) -> Tuple[str, str, int]:
-        """ return pip list """
+        """Return pip list."""
         return instance.list_packages()
 
     @staticmethod
     def show(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:
-        """ return pip show ${package} """
+        """Return pip show ${package}."""
         return instance.show(packages[0])
 
     @staticmethod
     def check(instance: PipHyperd) -> Tuple[str, str, int]:
-        """ return pip check """
+        """Return pip check."""
         return instance.check()
 
     @staticmethod
     def install(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:
-        """ return pip install ${packages} """
+        """Return pip install ${packages}."""
         return instance.install(*packages)
 
     @staticmethod
     def uninstall(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:
-        """ return pip uninstall ${packages} """
+        """Return pip uninstall ${packages}."""
         return instance.uninstall(*packages)
 
     @staticmethod
     def download(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:
-        """ return pip download ${packages} """
+        """Return pip download ${packages}."""
         return instance.download(*packages)
