@@ -1,7 +1,4 @@
-"""
-DO NOT REMOVE THIS
-"""
-
+"""DO NOT REMOVE THIS."""
 import sys
 import os
 
@@ -10,6 +7,7 @@ if not PATH in sys.path:
     sys.path.insert(1, PATH)
     from .main.parser import main
 del PATH
+
 
 if __name__ == '__main__':
     sys.exit(main())
