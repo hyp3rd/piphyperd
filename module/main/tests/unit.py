@@ -14,10 +14,10 @@ import unittest
 import sys
 import os
 import shutil
-import virtualenv
+import subprocess
 
 PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if not PATH in sys.path:
+if PATH not in sys.path:
     sys.path.insert(1, PATH)
     from piphyperd import PipHyperd
 del PATH
@@ -30,17 +30,18 @@ class TestMethods(unittest.TestCase):
     """
 
     def setUp(self):
-        """
-        tests setup
-        """
+        """Tests setup."""
         self.piphyperd = PipHyperd()
         self.venv_path = "{}/python-venv".format(os.path.dirname(__file__))
-        virtualenv.create_environment(self.venv_path, symlink=False)
+        self.venv_cmd = "virtualenv --activators bash --copies"
+
+        # virtualenv.create_environment(self.venv_path, symlink=False)
+        subprocess.call(
+            f'{os.sys.executable} -m {self.venv_cmd} {self.venv_path}',
+            shell=True)
 
     def tearDown(self):
-        """
-        Remove test venv after testing
-        """
+        """Remove venv after testing."""
         self.wiper(self.venv_path)
 
     def test_is_not_none(self):
@@ -57,11 +58,8 @@ class TestMethods(unittest.TestCase):
             PipHyperd(python_path="/path/to/nothing").check()
 
     def test_install(self):
-        """
-        Assert that after installing is in the output
-        """
-
-        virtualenv.subprocess.call(
+        """Assert that after installing is in the output."""
+        subprocess.call(
             'source {}/bin/activate'.format(self.venv_path), shell=True)
 
         self.piphyperd = PipHyperd(
@@ -78,7 +76,7 @@ class TestMethods(unittest.TestCase):
         Assert that after installing is in the output
         """
 
-        virtualenv.subprocess.call(
+        subprocess.call(
             'source {}/bin/activate'.format(self.venv_path), shell=True)
 
         self.piphyperd = PipHyperd(
@@ -95,7 +93,7 @@ class TestMethods(unittest.TestCase):
         Assert that "Latest" is in the output
         """
 
-        virtualenv.subprocess.call(
+        subprocess.call(
             'source {}/bin/activate'.format(self.venv_path), shell=True)
 
         self.piphyperd = PipHyperd(
