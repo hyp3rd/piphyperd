@@ -50,8 +50,10 @@ class PipHyperd:
                 self.pip_options + self.packages + self.command_args)
 
             process = Popen(
-                [sys.executable if self.python_path is None else self.python_path,
-                 "-m", "pip", command] + pip_full_cmd, stdout=PIPE, stderr=PIPE)
+                [sys.executable if self.python_path is None
+                 else self.python_path,
+                 "-m", "pip", command] + pip_full_cmd,
+                stdout=PIPE, stderr=PIPE)
 
             # wait for the process to terminate
             if wait:
@@ -70,9 +72,9 @@ class PipHyperd:
         except CalledProcessError as called_process_error:
             print(called_process_error)
             process.kill()
-            exception_output: str = f'Error output:\n{called_process_error.output}'
-            exception_cmd: str = f'cmd:\n{called_process_error.cmd}'
-            return exception_output, exception_cmd, called_process_error.returncode
+            ex_output: str = f'Error output:\n{called_process_error.output}'
+            ex_cmd: str = f'cmd:\n{called_process_error.cmd}'
+            return ex_output, ex_cmd, called_process_error.returncode
 
     def freeze(self) -> Tuple[str, str, int]:
         """Return installed pip packages in requirements format."""
