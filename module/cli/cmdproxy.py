@@ -41,10 +41,9 @@ class CmdProxy:
         return instance.check()
 
     @staticmethod
-    def dependencies_tree(instance: PipHyperd,
-                          cmd_arg: str) -> Tuple[str, str, int]:
+    def dependencies_tree(instance: PipHyperd) -> Tuple[str, str, int]:
         """Return pip check."""
-        return instance.dependencies_tree(cmd_arg)
+        return instance.dependencies_tree()
 
     @staticmethod
     def install(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:

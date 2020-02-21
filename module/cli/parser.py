@@ -41,10 +41,6 @@ def run(python_path: Optional[Path] = None, command: str = "") -> int:
                             default=["list"],
                             help="Provide a valid pip command")
 
-        parser.add_argument('tree-format', nargs=1, type=str,
-                            default="json",
-                            help="Provide a valid argument")
-
         parser.add_argument('--packages', action="store", nargs="+",
                             required=False, type=str,
                             help="Provide a list of packages")

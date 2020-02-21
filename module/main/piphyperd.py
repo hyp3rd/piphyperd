@@ -100,11 +100,11 @@ class PipHyperd:
         return self.__subprocess_wrapper("show")
 
     @staticmethod
-    def dependencies_tree(cmd_arg: str) -> Any:
+    def dependencies_tree() -> Any:
         """List a per-package dependencies tree."""
         process = subprocess.run(
             [str(sys.executable),
-             "-m", "pipdeptree", f'--{cmd_arg}'], check=True,
+             "-m", "pipdeptree", "--json-tree"], check=True,
             capture_output=True)
 
         process.check_returncode()
