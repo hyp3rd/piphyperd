@@ -14,6 +14,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/piphyperd>.
 
 from subprocess import Popen, PIPE, CalledProcessError
 import sys
+import pipdeptree
 from pathlib import Path
 from typing import Optional, List, Tuple, Any, Union
 
