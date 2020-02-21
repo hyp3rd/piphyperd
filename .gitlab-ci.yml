@@ -38,8 +38,8 @@ code_quality:
   script:
     - pip3 install --upgrade mypy
     - mypy --strict module/main/piphyperd.py
-    - mypy --strict module/main/cmdproxy.py
-    - mypy --strict module/main/parser.py
+    - mypy --strict module/cli/cmdproxy.py
+    - mypy --strict module/cli/parser.py
 
 coverage:
   stage: test

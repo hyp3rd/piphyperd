@@ -12,9 +12,8 @@ The module is published on PyPi: <https://pypi.org/project/piphyperd/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/piphyperd>.
 """
 
-from subprocess import Popen, PIPE, CalledProcessError
+import subprocess
 import sys
-import pipdeptree
 from pathlib import Path
 from typing import Optional, List, Tuple, Any, Union
 
@@ -50,11 +49,11 @@ class PipHyperd:
             pip_full_cmd: Union[Any] = sorted(
                 self.pip_options + self.packages + self.command_args)
 
-            process = Popen(
+            process = subprocess.Popen(
                 [sys.executable if self.python_path is None
                  else self.python_path,
                  "-m", "pip", command] + pip_full_cmd,
-                stdout=PIPE, stderr=PIPE)
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             # wait for the process to terminate
             if wait:
@@ -70,7 +69,7 @@ class PipHyperd:
 
             return output, outerr, process.returncode
 
-        except CalledProcessError as called_process_error:
+        except subprocess.CalledProcessError as called_process_error:
             print(called_process_error)
             process.kill()
             ex_output: str = f'Error output:\n{called_process_error.output}'
@@ -99,6 +98,18 @@ class PipHyperd:
         """
         self.packages.append(package)
         return self.__subprocess_wrapper("show")
+
+    @staticmethod
+    def dependencies_tree(cmd_arg: str) -> Any:
+        """List a per-package dependencies tree."""
+        process = subprocess.run(
+            [str(sys.executable),
+             "-m", "pipdeptree", cmd_arg], check=True,
+            capture_output=True)
+
+        process.check_returncode()
+
+        return process.stdout
 
     def check(self) -> Tuple[str, str, int]:
         """Verify installed packages have compatible dependencies."""

@@ -77,9 +77,10 @@ def run(python_path: Optional[Path] = None, command: str = "") -> int:
             "install": CmdProxy.install,
             "uninstall": CmdProxy.uninstall,
             "download": CmdProxy.download,
+            "dependencies-tree": CmdProxy.dependencies_tree,
         }
 
-        func: Any = switcher.get(command, lambda: 'Invalid pip command')
+        func: Any = switcher.get(command, lambda: 'Invalid command')
 
     instance = PipHyperd(python_path=python_path)
 
