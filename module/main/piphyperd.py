@@ -100,7 +100,7 @@ class PipHyperd:
         return self.__subprocess_wrapper("show")
 
     @staticmethod
-    def dependencies_tree() -> Any:
+    def dependencies_tree() -> Tuple[str, str, int]:
         """List a per-package dependencies tree."""
         process = subprocess.run(
             [str(sys.executable),
@@ -109,7 +109,13 @@ class PipHyperd:
 
         process.check_returncode()
 
-        return process.stdout
+        stdout = f'{process.stdout.decode("utf-8")}'
+        sys.stdout.write(stdout)
+
+        stderr = f'{process.stderr.decode("utf-8")}'
+        sys.stderr.write(stderr)
+
+        return stdout, stderr, process.returncode
 
     def check(self) -> Tuple[str, str, int]:
         """Verify installed packages have compatible dependencies."""
