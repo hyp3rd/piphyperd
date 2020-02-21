@@ -104,7 +104,7 @@ class PipHyperd:
         """List a per-package dependencies tree."""
         process = subprocess.run(
             [str(sys.executable),
-             "-m", "pipdeptree", cmd_arg], check=True,
+             "-m", "pipdeptree", f'--{cmd_arg}'], check=True,
             capture_output=True)
 
         process.check_returncode()
