@@ -80,3 +80,6 @@ venvs/
 # symlinks
 piphyperd
 # find . -type l | sed -e s'/^\.\///g' >> .gitignore
+
+# PyPi
+.pypirc
