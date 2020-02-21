@@ -125,11 +125,12 @@ setuptools.setup(
 
     packages=[
         envstring("NAME"), envstring("NAME") + ".main",
+        envstring("NAME"), envstring("NAME") + ".cli",
     ],
 
     entry_points={
         "console_scripts": [
-            "piphyperd=piphyperd.main:main",
+            "piphyperd=piphyperd.cli.parser:run",
         ]
     },
 

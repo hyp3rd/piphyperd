@@ -14,7 +14,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/piphyperd>.
 """
 
 from typing import Tuple, Any
-from .piphyperd import PipHyperd
+from ..main.piphyperd import PipHyperd
 
 
 class CmdProxy:

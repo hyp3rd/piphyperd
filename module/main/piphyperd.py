@@ -27,7 +27,7 @@ class PipHyperd:
     """
 
     def __init__(self, *pip_options: Any, python_path: Optional[Path] = None):
-        """Init method"""
+        """Init method."""
         # Path to the python binary to use
         self.python_path: Optional[Path] = python_path
         # A list of pip packages to install || show || download || uninstall

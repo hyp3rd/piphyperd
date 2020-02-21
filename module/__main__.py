@@ -1,7 +1,6 @@
 """DO NOT REMOVE THIS."""
-import sys
-from .main.parser import main
+from .cli.parser import run
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    run()
