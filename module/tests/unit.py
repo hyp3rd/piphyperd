@@ -35,12 +35,8 @@ class TestMethods(unittest.TestCase):
 
         process.check_returncode()
 
-        print(process.stdout)
-        print(process.stderr)
-
     def tearDown(self) -> None:
         """Remove venv after testing."""
-        print("**** CLEANING IT UP *****")
         self.wiper(self.venv_path)
 
     def test_a_is_not_none(self) -> None:
