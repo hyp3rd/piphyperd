@@ -80,6 +80,14 @@ coverage:
     - master
   allow_failure: true
 
+unit:
+  stage: test
+  extends: .base-setup
+  script:
+    - python -m module.tests.unit
+  only:
+    - development
+
 deploy:
   stage: deploy
   extends: .base-setup
