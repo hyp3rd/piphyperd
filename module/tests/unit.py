@@ -13,7 +13,6 @@ The code is available on GitLab: <https://gitlab.com/hyperd/piphyperd>.
 
 import unittest
 import os
-import sys
 import shutil
 from pathlib import Path
 import subprocess
