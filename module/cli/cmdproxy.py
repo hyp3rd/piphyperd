@@ -14,7 +14,7 @@ The code is available on GitLab: <https://gitlab.com/hyperd/piphyperd>.
 """
 
 from typing import Tuple, Any
-from .piphyperd import PipHyperd
+from ..main.piphyperd import PipHyperd
 
 
 class CmdProxy:
@@ -39,6 +39,11 @@ class CmdProxy:
     def check(instance: PipHyperd) -> Tuple[str, str, int]:
         """Return pip check."""
         return instance.check()
+
+    @staticmethod
+    def dependencies_tree(instance: PipHyperd) -> Tuple[str, str, int]:
+        """Return pip check."""
+        return instance.dependencies_tree()
 
     @staticmethod
     def install(instance: PipHyperd, packages: Any) -> Tuple[str, str, int]:

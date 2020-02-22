@@ -106,6 +106,14 @@ Verify installed packages have compatible dependencies.
 piphyperd.PipHyperd().check()
 ```
 
+#### pipdeptree
+
+Render installed packages with dependencies tree.
+
+```python
+piphyperd.PipHyperd().dependencies_tree()
+```
+
 #### pip install {{ packages }}
 
 Install pip packages.

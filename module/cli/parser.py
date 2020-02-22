@@ -15,15 +15,15 @@ import sys
 import argparse
 from typing import Optional, List, Any
 from pathlib import Path
-from .piphyperd import PipHyperd
+from ..main.piphyperd import PipHyperd
 from .cmdproxy import CmdProxy
 
 
-def main(python_path: Optional[Path] = None, command: str = "") -> int:
-    """Called when run as python3 -m ${MODULE}.
+def run(python_path: Optional[Path] = None, command: str = "") -> int:
+    """Execute when run as python3 -m ${MODULE}.
+
     Parse any additional arguments and call required module functions.
     """
-
     if sys.argv:
         # called through CLI
         # module_name = __loader__.name.split('.')[0]
@@ -50,18 +50,21 @@ def main(python_path: Optional[Path] = None, command: str = "") -> int:
 
         # check for alternative python path used to initialize the
         if args.python_path:
-            if isinstance(args.python_path, list) and isinstance(args.python_path[0], str):
+            if isinstance(args.python_path,
+                          list) and isinstance(args.python_path[0], str):
                 python_path = Path(args.python_path[0])
 
         # check for alternative python path
         if args.command:
-            if isinstance(args.command, list) and isinstance(args.command[0], str):
+            if isinstance(args.command,
+                          list) and isinstance(args.command[0], str):
                 command = args.command[0]
 
         command_args: List[str] = []
         if args.packages:
             command_args = list()
-            if isinstance(args.packages, list) and isinstance(args.packages[0], str):
+            if isinstance(args.packages,
+                          list) and isinstance(args.packages[0], str):
                 command_args.clear()
                 for package in args.packages:
                     command_args.append(package)
@@ -74,9 +77,10 @@ def main(python_path: Optional[Path] = None, command: str = "") -> int:
             "install": CmdProxy.install,
             "uninstall": CmdProxy.uninstall,
             "download": CmdProxy.download,
+            "dependencies-tree": CmdProxy.dependencies_tree,
         }
 
-        func: Any = switcher.get(command, lambda: 'Invalid pip command')
+        func: Any = switcher.get(command, lambda: 'Invalid command')
 
     instance = PipHyperd(python_path=python_path)
 

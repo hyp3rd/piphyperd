@@ -12,7 +12,7 @@ The module is published on PyPi: <https://pypi.org/project/piphyperd/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/piphyperd>.
 """
 
-from subprocess import Popen, PIPE, CalledProcessError
+import subprocess
 import sys
 from pathlib import Path
 from typing import Optional, List, Tuple, Any, Union
@@ -27,7 +27,7 @@ class PipHyperd:
     """
 
     def __init__(self, *pip_options: Any, python_path: Optional[Path] = None):
-        """Init method"""
+        """Init method."""
         # Path to the python binary to use
         self.python_path: Optional[Path] = python_path
         # A list of pip packages to install || show || download || uninstall
@@ -49,11 +49,11 @@ class PipHyperd:
             pip_full_cmd: Union[Any] = sorted(
                 self.pip_options + self.packages + self.command_args)
 
-            process = Popen(
+            process = subprocess.Popen(
                 [sys.executable if self.python_path is None
                  else self.python_path,
                  "-m", "pip", command] + pip_full_cmd,
-                stdout=PIPE, stderr=PIPE)
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             # wait for the process to terminate
             if wait:
@@ -69,7 +69,7 @@ class PipHyperd:
 
             return output, outerr, process.returncode
 
-        except CalledProcessError as called_process_error:
+        except subprocess.CalledProcessError as called_process_error:
             print(called_process_error)
             process.kill()
             ex_output: str = f'Error output:\n{called_process_error.output}'
@@ -99,11 +99,29 @@ class PipHyperd:
         self.packages.append(package)
         return self.__subprocess_wrapper("show")
 
+    @staticmethod
+    def dependencies_tree() -> Tuple[str, str, int]:
+        """List a per-package dependencies tree."""
+        process = subprocess.run(
+            [str(sys.executable),
+             "-m", "pipdeptree", "--json-tree"], check=True,
+            capture_output=True)
+
+        process.check_returncode()
+
+        stdout = f'{process.stdout.decode("utf-8")}'
+        sys.stdout.write(stdout)
+
+        stderr = f'{process.stderr.decode("utf-8")}'
+        sys.stderr.write(stderr)
+
+        return stdout, stderr, process.returncode
+
     def check(self) -> Tuple[str, str, int]:
         """Verify installed packages have compatible dependencies."""
         return self.__subprocess_wrapper("check", wait=True)
 
-    def install(self, *packages: List[str]) -> Tuple[str, str, int]:
+    def install(self, *packages: Any) -> Tuple[str, str, int]:
         """Install pip packages.
 
         *packages -- List of packages to install
@@ -115,7 +133,7 @@ class PipHyperd:
 
         return self.__subprocess_wrapper("install")
 
-    def uninstall(self, *packages: List[str]) -> Tuple[str, str, int]:
+    def uninstall(self, *packages: Any) -> Tuple[str, str, int]:
         """Uninstall pip packages.
 
         *packages -- List of packages to uninstall
@@ -128,7 +146,7 @@ class PipHyperd:
         self.pip_options.insert(0, "-y")
         return self.__subprocess_wrapper("uninstall")
 
-    def download(self, *packages: List[str],
+    def download(self, *packages: Any,
                  destination: Optional[Path] = None) -> Tuple[str, str, int]:
         """Download pip packages.
 
@@ -136,7 +154,6 @@ class PipHyperd:
 
         destination -- Destination path for the packages download
         """
-
         self.packages.clear()
 
         for package in packages:

@@ -1,3 +1,3 @@
 """DO NOT REMOVE THIS."""
-from .main.parser import main
+from .cli.parser import run
 from .main.piphyperd import PipHyperd

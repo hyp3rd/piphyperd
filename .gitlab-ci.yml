@@ -2,21 +2,43 @@
 image: python:latest
 
 variables:
-  PIP_CACHE: ${CI_PROJECT_DIR}/pip_cache
+  BUILD_CACHE: "${CI_PROJECT_DIR}/build_cache"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  DS_PYTHON_VERSION: 3
+  DS_PIP_VERSION: "20.0.2"
+  PIP_REQUIREMENTS_FILE: "requirements.txt"
+  SAST_DEFAULT_ANALYZERS: "bandit"
+  SAST_DISABLE_DIND: "true"
+  SAST_EXCLUDED_PATHS: ${BUILD_CACHE}/*,${PIP_CACHE_DIR}/*
+
 cache:
   paths:
-    - ${CI_PROJECT_DIR}/pip_cache
+    - ${CI_PROJECT_DIR}/build_cache
+    - .cache/pip
   key: ${CI_PROJECT_ID}
 
-services:
-  - docker:dind
+include:
+  - template: Dependency-Scanning.gitlab-ci.yml
+
+bandit-sast:
+  trigger:
+    include:
+      - template: SAST.gitlab-ci.yml
+    strategy: depend
+  only:
+    - master
+
+license-scanning:
+  trigger:
+    include:
+      - template: License-Scanning.gitlab-ci.yml
+    strategy: depend
+  only:
+    - master
 
 stages:
   - test
-
-# before_script:
-#   - apt-get update && apt-get install make
-#   - python3 --version
+  - deploy
 
 pylint:
   stage: test
@@ -32,25 +54,54 @@ pylint:
     paths:
       - ./pylint/
 
-code_quality:
+code-quality:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - pip3 install --upgrade mypy
     - mypy --strict module/main/piphyperd.py
-    - mypy --strict module/main/cmdproxy.py
-    - mypy --strict module/main/parser.py
+    - mypy --strict module/cli/cmdproxy.py
+    - mypy --strict module/cli/parser.py
+  allow_failure: true
 
 coverage:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - pip3 install codecov
-    - pip3 install yarl==1.1.0
     - coverage run -m module.tests.unit
     - coverage report -m
+    - coverage html -d ${BUILD_CACHE}/tests/coverage
+    - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+  only:
+    - development
+    - master
+  allow_failure: true
 
-.pipelinesetup:
+deploy:
+  stage: deploy
+  extends: .base-setup
+  script:
+    - pip3 install twine
+    - echo $PYPIRC_INI | base64 -d > .pypirc
+    - make clean
+    - make module
+    - make upload
+    - rm -rf .pypirc
+  when: manual
+  artifacts:
+    paths:
+      - ./dist/
+  only:
+    - release
+    - tags
+
+.base-setup:
   before_script:
-    - mkdir -p $PIP_CACHE
-    - pip3 install --upgrade pip virtualenv
+    - python --version
+    - rm -rf ${BUILD_CACHE}/venvs
+    - mkdir -p $BUILD_CACHE
+    - pip3 install --upgrade pip virtualenv pylint
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip3 install -r requirements.txt

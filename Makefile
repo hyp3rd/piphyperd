@@ -11,10 +11,11 @@ PWD ?= pwd_unknown
 MODULE_NAME = \
 	$(shell awk -F= '/^NAME\ ?=/{gsub(/\47|"/, "", $$NF);print $$NF;exit}' variables)
 MODULE_VERSION = \
-	$(shell awk -F= '/^VERSION\ ?=/{gsub(/\47|"/, "", $$NF);print $$NF;exit}' variables)
+	$(shell awk -F' = ' '$1 == "__version__" {gsub(/"/, "", $2); print $2}' module/main/release.py)
 
 # export such that its passed to shell functions for Docker to pick up.
 export MODULE_NAME
+export MODULE_VERSION
 
 .PHONY: fork
 FILES = \
@@ -50,7 +51,8 @@ pylint:
 
 .PHONY: upload
 upload:
-	twine upload ./dist/$(MODULE_NAME)-$(MODULE_VERSION)*
+	echo $(MODULE_VERSION)
+	twine upload --config-file .pypirc ./dist/$(MODULE_NAME)-$(MODULE_VERSION)*
 
 .PHONY: clean
 clean:
