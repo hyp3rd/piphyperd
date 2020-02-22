@@ -65,6 +65,8 @@ code-quality:
   allow_failure: true
 
 coverage:
+  variables:
+    CI_DEBUG_TRACE: "true"
   stage: test
   extends: .base-setup
   script:
@@ -81,6 +83,8 @@ coverage:
   allow_failure: true
 
 unit:
+  variables:
+    CI_DEBUG_TRACE: "true"
   stage: test
   extends: .base-setup
   script:
