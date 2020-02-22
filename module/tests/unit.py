@@ -29,8 +29,7 @@ class TestMethods(unittest.TestCase):
         self.venv_path = "{}/python-venv".format(os.path.dirname(__file__))
 
         process = subprocess.run(
-            [sys.executable,
-             "-m", "virtualenv",
+            ["virtualenv",
              self.venv_path], check=True,
             capture_output=True)
 
