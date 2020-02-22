@@ -42,7 +42,7 @@ stages:
 
 pylint:
   stage: test
-  extends: .pipelinesetup
+  extends: .base-setup
   script:
     - pip3 install --upgrade pylint pylint-exit anybadge
     - mkdir ./pylint
