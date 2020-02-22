@@ -30,7 +30,7 @@ class TestMethods(unittest.TestCase):
 
         process = subprocess.run(
             [sys.executable,
-             "-m", "virtualenv", "--activators", "bash", "--copies",
+             "-m", "virtualenv",
              self.venv_path], check=True,
             capture_output=True)
 
