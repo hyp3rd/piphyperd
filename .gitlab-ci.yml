@@ -112,6 +112,6 @@ deploy:
     - rm -rf ${BUILD_CACHE}/venvs
     - mkdir -p $BUILD_CACHE
     - pip3 install --upgrade pip virtualenv pylint
-    - virtualenv venv
-    - source venv/bin/activate
+    - virtualenv ./venv
+    - source ./venv/bin/activate
     - pip3 install -r requirements.txt

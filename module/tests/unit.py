@@ -29,19 +29,14 @@ class TestMethods(unittest.TestCase):
         self.venv_path = "{}/python-venv".format(os.path.dirname(__file__))
 
         process = subprocess.run(
-            [sys.executable,
-             "-m", "virtualenv",
+            ["virtualenv",
              self.venv_path], check=True,
             capture_output=True)
 
         process.check_returncode()
 
-        print(process.stdout)
-        print(process.stderr)
-
     def tearDown(self) -> None:
         """Remove venv after testing."""
-        print("**** CLEANING IT UP *****")
         self.wiper(self.venv_path)
 
     def test_a_is_not_none(self) -> None:
