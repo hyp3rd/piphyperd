@@ -68,6 +68,8 @@ coverage:
   stage: test
   extends: .base-setup
   script:
+    - python --version
+    - which python
     - pip3 install codecov
     - coverage run -m module.tests.unit
     - coverage report -m
