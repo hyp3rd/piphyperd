@@ -36,9 +36,9 @@ class TestMethods(unittest.TestCase):
 
         process.check_returncode()
 
-    def tearDown(self) -> None:
-        """Remove venv after testing."""
-        self.wiper(self.venv_path)
+    # def tearDown(self) -> None:
+    #     """Remove venv after testing."""
+    #     self.wiper(self.venv_path)
 
     def test_a_is_not_none(self) -> None:
         """Assert that PipHyperd is not None."""
