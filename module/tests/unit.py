@@ -73,9 +73,6 @@ class TestMethods(unittest.TestCase):
 
     def test_e_list_outdated(self) -> None:
         """Assert that "Latest" is in the output."""
-        subprocess.call(
-            'source {}/bin/activate'.format(self.venv_path), shell=True)
-
         self.piphyperd = PipHyperd(
             python_path=Path("{}/bin/python3".format(self.venv_path)))
 

@@ -143,7 +143,7 @@ class PipHyperd:
         for package in packages:
             self.packages.append(str(package))
 
-        self.pip_options.insert(0, "-y")
+        # self.pip_options.insert(0, "-y")
         return self.__subprocess_wrapper("uninstall")
 
     def download(self, *packages: Any,
