@@ -121,7 +121,7 @@ class PipHyperd:
         """Verify installed packages have compatible dependencies."""
         return self.__subprocess_wrapper("check", wait=True)
 
-    def install(self, *packages: List[str]) -> Tuple[str, str, int]:
+    def install(self, *packages: Any) -> Tuple[str, str, int]:
         """Install pip packages.
 
         *packages -- List of packages to install
@@ -133,7 +133,7 @@ class PipHyperd:
 
         return self.__subprocess_wrapper("install")
 
-    def uninstall(self, *packages: List[str]) -> Tuple[str, str, int]:
+    def uninstall(self, *packages: Any) -> Tuple[str, str, int]:
         """Uninstall pip packages.
 
         *packages -- List of packages to uninstall
@@ -146,7 +146,7 @@ class PipHyperd:
         self.pip_options.insert(0, "-y")
         return self.__subprocess_wrapper("uninstall")
 
-    def download(self, *packages: List[str],
+    def download(self, *packages: Any,
                  destination: Optional[Path] = None) -> Tuple[str, str, int]:
         """Download pip packages.
 
@@ -154,7 +154,6 @@ class PipHyperd:
 
         destination -- Destination path for the packages download
         """
-
         self.packages.clear()
 
         for package in packages:
