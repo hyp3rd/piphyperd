@@ -4,7 +4,7 @@
 
 [![pylint](https://gitlab.com/hyperd/piphyperd/-/jobs/artifacts/master/raw/pylint/pylint.svg?job=pylint)](https://gitlab.com/hyperd/piphyperd/commits/master)
 
-A simple python package to leverage pip programmatically.
+A simple python package to leverage pip programmatically, and via CLI.
 **piphyperd** is a wrapper around **pip**; it can provide features like automation or dependencies control within your workflows.
 
 ## About this package
@@ -27,10 +27,14 @@ Taking everything into account, still might be necessary, or usefull, handling p
 
 ```python
 # leverage subprocess.Popen to execute pip commands
-process = Popen(
-    [sys.executable if self.python_path is None else self.python_path,
-     "-m", "pip", command]
-    + self.pip_options + self.packages + self.command_args, stdout=PIPE, stderr=PIPE)
+pip_full_cmd: Union[Any] = sorted(
+    self.pip_options + self.packages + self.command_args)
+
+process = subprocess.Popen(
+    [sys.executable if self.python_path is None
+        else self.python_path,
+        "-m", "pip", command] + pip_full_cmd,
+    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 ```
 
 For further information, continue reading from the source of this topic at the [the official pypa](https://pip.pypa.io/en/latest/user_guide/#using-pip-from-your-program) user guide.
@@ -52,6 +56,7 @@ The module is wrapping pip commands in methods, exposed through the object `PipH
 
 ```python
 def __init__(self, *pip_options: Any, python_path: Optional[Path] = None):
+    """Init method."""
     # Path to the python binary to use
     self.python_path: Optional[Path] = python_path
     # A list of pip packages to install || show || download || uninstall
@@ -67,14 +72,20 @@ The API exposed conveniently wraps a set of pip commands that can help generatin
 
 ### Object description
 
-To follow, a brief walkthrough through the methods exposed by the `PipHyperd` object.
+To follow, a brief walkthrough through the methods exposed by the `PipHyperd` object, **programmatically** and via the **CLI**
 
 #### pip freeze
 
 Output installed pip packages in requirements format:
 
 ```python
+# python
 piphyperd.PipHyperd().freeze()
+```
+
+```bash
+# cli
+piphyperd freeze
 ```
 
 #### pip list
@@ -84,10 +95,16 @@ List installed pip packages.
 list_outdated -- True || False to list or not the outdated packages
 
 ```python
+# python
 piphyperd.PipHyperd("--verbose").list_packages() # the argument "--verbose" is of course optional
 
 # List outdated packages
 piphyperd.PipHyperd().list(True)
+```
+
+```bash
+# cli
+piphyperd list
 ```
 
 #### pip show {{ package }}
@@ -95,7 +112,13 @@ piphyperd.PipHyperd().list(True)
 Show information about installed packages.
 
 ```python
+# python
 piphyperd.PipHyperd("--verbose").show("ansible")
+```
+
+```bash
+# cli
+piphyperd show --package <package_name>
 ```
 
 #### pip check
@@ -103,7 +126,13 @@ piphyperd.PipHyperd("--verbose").show("ansible")
 Verify installed packages have compatible dependencies.
 
 ```python
+# python
 piphyperd.PipHyperd().check()
+```
+
+```bash
+# cli
+piphyperd check
 ```
 
 #### pipdeptree
@@ -111,7 +140,13 @@ piphyperd.PipHyperd().check()
 Render installed packages with dependencies tree.
 
 ```python
+# python
 piphyperd.PipHyperd().dependencies_tree()
+```
+
+```bash
+# cli
+piphyperd dependencies-tree
 ```
 
 #### pip install {{ packages }}
@@ -119,7 +154,14 @@ piphyperd.PipHyperd().dependencies_tree()
 Install pip packages.
 
 ```python
+# python
 piphyperd.PipHyperd("-U").install("ansible", "cryptography") # -U is of course optional, set here as example
+```
+
+```bash
+# cli
+piphyperd install --packages <package_name_1> <package_name_2> <package_name_n>
+piphyperd install --package <package_name>
 ```
 
 #### pip download {{ package }}
@@ -127,7 +169,13 @@ piphyperd.PipHyperd("-U").install("ansible", "cryptography") # -U is of course o
 Download pip packages.
 
 ```python
+# python
 piphyperd.PipHyperd("-U").download("ansible", "pip", "cryptography", destination="/your/path/here") # the destination argument is optional
+```
+
+```bash
+# cli
+piphyperd download --package twine==3.1.1
 ```
 
 #### pip uninstall {{ packages }}
@@ -136,6 +184,12 @@ Uninstall pip packages.
 
 ```python
 piphyperd.PipHyperd().uninstall("ansible", "pip", "cryptography") # the destination argument is optional
+```
+
+```bash
+# cli
+piphyperd uninstall --packages <package_name_1> <package_name_2> <package_name_n>
+piphyperd uninstall --package <package_name>
 ```
 
 ## License
