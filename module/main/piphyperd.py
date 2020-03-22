@@ -105,7 +105,6 @@ class PipHyperd:
             [str(sys.executable),
              "-m", "pipdeptree", "--json-tree"], check=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            # capture_output=True)
 
         process.check_returncode()
 
