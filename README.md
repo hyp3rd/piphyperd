@@ -11,14 +11,14 @@ A simple python package to leverage pip programmatically.
 
 The reasons behind this package, in alternative to the standard `pip` (`import pip`) module, are in the attempt to expose a more stable interface, when programmatically installing or managing python packages, within pipelines or automation workflows.
 
-Although it is a **Python** module, and it is available via `import pip`, by design, **pip** is not supposed to be a library; every detail is subject to changes for any reason, from the import name itself to its API. It might be better to call the pip’s internal APIs differently.
+Although it is a **Python** module, and it is available via `import pip`, by design, **pip** is not supposed to be a library; every detail is subject to changes for any reason, from the import name itself to its API. It might be better to call the pip's internal APIs differently.
 
 ### Pitfalls
 
 When leveraging `pip` programmatically, there are also other topics worth considering:
 
 1. The pip code assumes that it is in sole control of the global state of the program;
-2. pip’s code is not thread-safe. If you were to run pip in a thread;
+2. pip's code is not thread-safe. If you were to run pip in a thread;
 3. pip assumes that once it has finished its work, the process terminates.
 
 Furthermore, installing packages under the `sys.path` from a running Python process might result in unexpected or undesired behaviors.
