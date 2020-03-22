@@ -71,7 +71,6 @@ class PipHyperd:
 
         except subprocess.CalledProcessError as called_process_error:
             print(called_process_error)
-            process.kill()
             ex_output: str = f'Error output:\n{called_process_error.output}'
             ex_cmd: str = f'cmd:\n{called_process_error.cmd}'
             return ex_output, ex_cmd, called_process_error.returncode
@@ -105,7 +104,8 @@ class PipHyperd:
         process = subprocess.run(
             [str(sys.executable),
              "-m", "pipdeptree", "--json-tree"], check=True,
-            capture_output=True)
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            # capture_output=True)
 
         process.check_returncode()
 

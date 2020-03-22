@@ -29,8 +29,7 @@ class TestMethods(unittest.TestCase):
 
         process = subprocess.run(
             ["virtualenv",
-             self.venv_path], check=True,
-            capture_output=True)
+             self.venv_path], check=True)
 
         process.check_returncode()
 
