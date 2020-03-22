@@ -71,7 +71,7 @@ coverage:
     - python --version
     - which python
     - pip3 install codecov
-    - coverage run -m module.tests.unit
+    - coverage run -m module.tests.test_unit
     - coverage report -m
     - coverage html -d ${BUILD_CACHE}/tests/coverage
     - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
@@ -84,7 +84,7 @@ unit:
   stage: test
   extends: .base-setup
   script:
-    - python -m module.tests.unit
+    - python -m module.tests.test_unit
   only:
     - development
 
