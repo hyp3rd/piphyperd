@@ -4,6 +4,8 @@
 
 [![pylint](https://gitlab.com/hyperd/piphyperd/-/jobs/artifacts/master/raw/pylint/pylint.svg?job=pylint)](https://gitlab.com/hyperd/piphyperd/commits/master)
 
+![Python package](https://github.com/hyp3rd/piphyperd/workflows/Python%20package/badge.svg)
+
 A simple python package to leverage pip programmatically, and via CLI.
 **piphyperd** is a wrapper around **pip**; it can provide features like automation or dependencies control within your workflows.
 
