@@ -27,11 +27,10 @@ class TestMethods(unittest.TestCase):
         self.piphyperd = PipHyperd()
         self.venv_path = "{}/python-venv".format(os.path.dirname(__file__))
 
-        process = subprocess.run(
+        subprocess.run(
             ["virtualenv",
-             self.venv_path], check=True)
-
-        process.check_returncode()
+             self.venv_path], check=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     def tearDown(self) -> None:
         """Remove venv after testing."""
