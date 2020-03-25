@@ -38,7 +38,7 @@ class PipHyperd:
         self.pip_options: List[str] = list(pip_options)
 
     def __subprocess_wrapper(self, command: str,
-                             wait: bool = True) -> Tuple[str, str, int]:
+                             wait: bool = False) -> Tuple[str, str, int]:
         """Subprocess wrapper allowing to execute pip commands.
 
         command -- The pip command to execute (e.g. "install", "freeze", [..])
