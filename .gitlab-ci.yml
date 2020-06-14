@@ -103,7 +103,6 @@ deploy:
     paths:
       - ./dist/
   only:
-    - release
     - tags
 
 .base-setup:
