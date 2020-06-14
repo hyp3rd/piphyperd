@@ -118,7 +118,7 @@ setuptools.setup(
     ],
 
     install_requires=[
-        'pipdeptree==0.13.2',
+        'pipdeptree==1.0.0',
     ],
 
     packages=[

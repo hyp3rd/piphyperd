@@ -12,7 +12,7 @@ The module is published on PyPi: <https://pypi.org/project/piphyperd/>.
 The code is available on GitLab: <https://gitlab.com/hyperd/piphyperd>.
 """
 
-import subprocess
+import subprocess   # nosec
 import sys
 from pathlib import Path
 from typing import Optional, List, Tuple, Any, Union
@@ -53,7 +53,7 @@ class PipHyperd:
                 [sys.executable if self.python_path is None
                  else self.python_path,
                  "-m", "pip", command] + pip_full_cmd,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)   # nosec
 
             # wait for the process to terminate
             if wait:
@@ -104,7 +104,7 @@ class PipHyperd:
         process = subprocess.run(
             [str(sys.executable),
              "-m", "pipdeptree", "--json-tree"], check=True,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)   # nosec
 
         process.check_returncode()
 

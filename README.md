@@ -198,6 +198,12 @@ piphyperd uninstall --package <package_name>
 
 [GNU General Public License v3 (GPLv3)](https://gitlab.com/hyperd/piphyperd/blob/master/LICENSE)
 
+## Report a Vulnerability
+
+If you believe you have found a security vulnerability in **venvctl**, refer to the [Tidelift security policy](https://tidelift.com/docs/security).
+
+The **Tidelift** team will coordinate the vunerability response and disclosure.
+
 ## Author Information
 
 [Francesco Cosentino](https://www.linkedin.com/in/francesco-cosentino/)
