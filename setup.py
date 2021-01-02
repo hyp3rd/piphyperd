@@ -56,9 +56,9 @@ def read(rel_path: str) -> Any:
 
 
 try:
-    LONG_DESCRIPTION = read("README.md")
+    __long_description = read("README.md")
 except FileNotFoundError:
-    LONG_DESCRIPTION = ""
+    __long_description = ""
 
 if os.path.isfile("variables"):
     try:
@@ -83,7 +83,7 @@ setuptools.setup(
     },
 
     description=envstring("DESCRIPTION"),
-    long_description=LONG_DESCRIPTION,
+    long_description=__long_description,
     long_description_content_type="text/markdown",
 
     license='GPLv3',
@@ -118,7 +118,7 @@ setuptools.setup(
     ],
 
     install_requires=[
-        'pipdeptree==1.0.0',
+        'pipdeptree==2.0.0',
     ],
 
     packages=[
