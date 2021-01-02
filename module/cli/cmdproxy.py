@@ -42,7 +42,7 @@ class CmdProxy:
 
     @staticmethod
     def dependencies_tree(instance: PipHyperd) -> Tuple[str, str, int]:
-        """Return pip check."""
+        """Return pipdeptree in json format."""
         return instance.dependencies_tree()
 
     @staticmethod
